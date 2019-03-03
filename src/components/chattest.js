@@ -9,39 +9,39 @@ export default class Chat extends React.Component {
         this.state = {
             text: '',
             name: '',
-            messages: []
+            messages: [],
+            typing: false
+            
         }
         this.sendSocketIO = this.sendSocketIO.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
-        //when recieves new messages from peeps
-        // socket.on('RECEIVE_MESSAGE', function(msg) {
-        //     this.setState({
-        //         messages: [...this.state.messages, msg]
-        //     })
-        // })
-        socket.on('connect', function(data) {
+        socket.on('connection', function(data) {
             console.log(data)
+        })
+        socket.on('typeUpdate',(msg) => {
+            this.setState({
+                text: msg
+            })
         })
     }
     
     componentDidUpdate() {
-        // socket.on('RECEIVE_MESSAGE', function(msg) {
+        // socket.on('typeUpdate',(msg) =>{
         //     this.setState({
-        //         messages: [...this.state.messages, msg]
+        //         msgTest: msg
         //     })
         // })
     }
-    
     componentWillUnmount() {
         // socket.off("disconnect");
         // socket.off("change_data");
     }
     sendSocketIO() {
         //sends data to backend
-        socket.emit('SEND_MESSAGE', this.state.text);
+        // socket.emit('SEND_MESSAGE', this.state.text);
         this.setState({
             messages: [...this.state.messages, this.state.text],
             text: ''
@@ -49,18 +49,13 @@ export default class Chat extends React.Component {
     }
     onInputChange(event) {
         this.setState({
-            text: event.target.value
-        })
+            typing: true
+        },()=> socket.emit('TYPING', this.state.text))
     }
     handleSubmit(e) {
         e.preventDefault()
     }
     render() {
-        socket.on('RECEIVE_MESSAGE', function(msg) {
-            this.setState({
-                messages: [...this.state.messages, msg]
-            })
-        })
         return (
             <div>
                 <form type="text" onSubmit={this.handleSubmit}>
@@ -77,9 +72,12 @@ export default class Chat extends React.Component {
                     {/* <button className="next-btn"> NEXT </button> */}
                     <button onClick={this.sendSocketIO}>Send Socket.io</button>
                 </form>
-                <p>{this.state.text}</p>
-                <p>{this.state.messages}. </p>
+                {/* <p>{this.state.text}</p> */}
+                <p>{this.state.messages}<span>{this.state.text}</span> </p>
             </div>
         )
     }
 }
+// const mapStateToProps = state => ({
+//     // text
+// })
