@@ -1,7 +1,7 @@
 export const TYPING_MESSAGE = 'TYPING_MESSAGE'
-export const typing = (text) => ({
+export const typing = (typing) => ({
     type: TYPING_MESSAGE,
-    text
+    typing
 });
 export const LOAD_MESSAGES = 'LOAD_MESSAGES';
 export const loadMessages = (messArray, index) => ({
@@ -15,4 +15,8 @@ export const userTyping = (currUser) => ({
     type: USER_TYPING,
     currUser
 });
-
+export const TIMER = 'TIMER';
+export const timer = (timer) => ({
+    type: TIMER,
+    timer
+})
