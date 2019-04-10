@@ -1,30 +1,30 @@
 import React from 'react'
-import openSocket from 'socket.io-client';
 import { Redirect } from 'react-router-dom';
-const socket = openSocket('http://localhost:8080')
+
 
 export default class RegisterUser extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             name: '',
             error: '',
             redirect: false
         }
+        this.socket = this.props.socket
         this.errorHandler();
         this.sendSocketIO = this.sendSocketIO.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
-        socket.on('connection', function(data) {
+        this.socket.on('connection', function(data) {
             console.log(data)
         })
-        socket.on('typeUpdate',(msg) => {
-            this.setState({
-                text: msg
-            })
-        })
+        // this.socket.on('typeUpdate',(msg) => {
+        //     this.setState({
+        //         text: msg
+        //     })
+        // })
     }
     componentDidUpdate() {
         // socket.on('typeUpdate',(msg) =>{
@@ -38,7 +38,7 @@ export default class RegisterUser extends React.Component {
         // socket.off("change_data");
     }
     errorHandler = () => {
-        socket.on('err', err => {
+        this.socket.on('err', err => {
             this.setState({
                 error: err
             })
@@ -50,7 +50,8 @@ export default class RegisterUser extends React.Component {
                 error: 'must fill out username'
             })    
         }else{
-            socket.emit('registerUsername', this.state.name)
+            localStorage.setItem("username", this.state.name);
+            this.socket.emit('registerUsername', this.state.name)
             this.setState({
                 redirect: true
             })

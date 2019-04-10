@@ -4,8 +4,8 @@ import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:8080')
 
 export default class Chat extends React.Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super();
         this.state = {
             text: '',
             name: '',

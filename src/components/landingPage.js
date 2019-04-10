@@ -9,7 +9,7 @@ export default function LandingPage(props) {
             <p>Stories are done one sentence at a time, with each player getting to do a sentence</p>
             <p>The game is finished when all players choose to end, or if someone leaves</p>
             <p>Stories can be saved to a public library to be viewed by everyone</p>
-            <RegisterUser />
+            <RegisterUser socket={props.socket}/>
         </div>
         
     )

@@ -1,5 +1,6 @@
 import React from 'react'
 import openSocket from 'socket.io-client';
+import {typing} from '../actions'
 //
 const socket = openSocket('http://localhost:8080')
 
@@ -47,6 +48,7 @@ export default class Chat extends React.Component {
         })    
     }
     onInputChange(event) {
+        this.props.dispatch(typing)
         this.setState({
             typing: true
         },()=> socket.emit('TYPING', this.state.text))
