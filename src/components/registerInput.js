@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom';
-
-
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 export default class RegisterUser extends React.Component {
     constructor(props) {
         super(props);
@@ -50,8 +50,9 @@ export default class RegisterUser extends React.Component {
                 error: 'must fill out username'
             })    
         }else{
-            localStorage.setItem("username", this.state.name);
-            this.socket.emit('registerUsername', this.state.name)
+            // localStorage.setItem("username", this.state.name);
+            cookies.set('username', this.state.name, { path: '/' });
+            this.socket.emit('login', this.state.name)
             this.setState({
                 redirect: true
             })
